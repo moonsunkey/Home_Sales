@@ -1,66 +1,88 @@
 # Home_Sales
 
-Instructions
-Rename the Home_Sales_starter_code.ipynb file as Home_Sales.ipynb.
+## Project Overview
 
-Import the necessary PySpark SQL functions for this assignment.
+The purpose of this project is to utilize Spark and PySpark SQL functions to analyze home sales data and compare the runtime with cached and partitioned data.
 
-Read the home_sales_revised.csv data in the starter code into a Spark DataFrame.
+## Queries and Outputs
 
-Create a temporary table called home_sales.
+### 1. What is the average price for a four-bedroom house sold for each year?
 
-Answer the following questions using SparkSQL:
+```plaintext
++----+-------------+
+|YEAR|AVERAGE_PRICE|
++----+-------------+
+|2022|    296363.88|
+|2021|    301819.44|
+|2020|    298353.78|
+|2019|     300263.7|
++----+-------------+
+```
 
-What is the average price for a four-bedroom house sold for each year? Round off your answer to two decimal places.
+### 2. What is the average price of a home for each year the home was built, that has three bedrooms and three bathrooms?
 
-What is the average price of a home for each year the home was built, that has three bedrooms and three bathrooms? Round off your answer to two decimal places.
+```plaintext
++----+-------------+
+|YEAR|AVERAGE_PRICE|
++----+-------------+
+|2017|    292676.79|
+|2016|    290555.07|
+|2015|     288770.3|
+|2014|    290852.27|
+|2013|    295962.27|
+|2012|    293683.19|
+|2011|    291117.47|
+|2010|    292859.62|
++----+-------------+
+```
+### 3. What is the average price of a home for each year the home was built, that has three bedrooms, three bathrooms, two floors, and is greater than or equal to 2,000 square feet? 
 
-What is the average price of a home for each year the home was built, that has three bedrooms, three bathrooms, two floors, and is greater than or equal to 2,000 square feet? Round off your answer to two decimal places.
+```plaintext
++----+-------------+
+|YEAR|AVERAGE_PRICE|
++----+-------------+
+|2017|    280317.58|
+|2016|     293965.1|
+|2015|    297609.97|
+|2014|    298264.72|
+|2013|    303676.79|
+|2012|    307539.97|
+|2011|    276553.81|
+|2010|    285010.22|
++----+-------------+
+```
 
-What is the average price of a home per "view" rating having an average home price greater than or equal to $350,000? Determine the run time for this query, and round off your answer to two decimal places.
+### 4. What is the average price of a home per "view" rating having an average home price greater than or equal to $350,000? 
 
-Cache your temporary table home_sales.
+```plaintext
++----+-------------+
+|view|AVERAGE_PRICE|
++----+-------------+
+|  99|   1061201.42|
+|  98|   1053739.33|
+|  97|   1129040.15|
+|  96|   1017815.92|
+|  95|    1054325.6|
+|  94|    1033536.2|
+|  93|   1026006.06|
+|  92|    970402.55|
+|  91|   1137372.73|
+|  90|   1062654.16|
+|  89|   1107839.15|
+|  88|   1031719.35|
+|  87|    1072285.2|
+|  86|   1070444.25|
+|  85|   1056336.74|
+|  84|   1117233.13|
+|  83|   1033965.93|
+|  82|    1063498.0|
+|  81|   1053472.79|
+|  80|    991767.38|
++----+-------------+
+```
 
-Check if your temporary table is cached.
+### Performance Analysis
 
-Using the cached data, run the last query that calculates the average price of a home per "view" rating having an average home price greater than or equal to $350,000. Determine the runtime and compare it to uncached runtime.
+Running the same query to answer the last question question above after caching the temporary table home_sales is about 0.00011658668518066406 seconds faster.
 
-Partition by the "date_built" field on the formatted parquet home sales data.
-
-Create a temporary table for the parquet data.
-
-Run the last query that calculates the average price of a home per "view" rating having an average home price greater than or equal to $350,000. Determine the runtime and compare it to uncached runtime.
-
-Uncache the home_sales temporary table.
-
-Verify that the home_sales temporary table is uncached using PySpark.
-
-Download your Home_Sales.ipynb file and upload it into your "Home_Sales" GitHub repository.
-
-Support and Resources
-Your instructional team will provide support during classes and office hours. You will also have access to learning assistants and tutors to help you with topics as needed. Make sure to take advantage of these resources as you collaborate with your partner on this project.
-
-Requirements
-A Spark DataFrame is created from the dataset. (5 points)
-
-A temporary table of the original DataFrame is created. (10 points)
-
-A query is written that returns the average price, rounded to two decimal places, for a four-bedroom house that was sold in each year. (5 points)
-
-A query is written that returns the average price, rounded to two decimal places, of a home that has three bedrooms and three bathrooms for each year the home was built. (5 points)
-
-A query is written that returns the average price of a home with three bedrooms, three bathrooms, two floors, and is greater than or equal to 2,000 square feet for each year the home was built rounded to two decimal places. (5 points)
-
-A query is written that returns the average price of a home per "view" rating having an average home price greater than or equal to $350,000, rounded to two decimal places. (The output shows the run time for this query.) (10 points)
-
-A cache of the temporary "home_sales" table is created and validated. (10 points)
-
-The query from step 6 is run on the cached temporary table, and the run time is computed. (10 points)
-
-A partition of the home sales dataset by the "date_built" field is created, and the formatted parquet data is read. (10 points)
-
-A temporary table of the parquet data is created. (10 points)
-
-The query from step 6 is run on the parquet temporary table, and the run time is computed. (10 points)
-
-The "home_sales" temporary table is uncached and verified. (10 points)
+Then the data is partitioned by the "date_built" and a temporary table "homes_temp_view" is created based on the parquet data. Running the same query with the newly created table improves the time further by 0.00015974044799804688 seconds from running it with the cached data.
